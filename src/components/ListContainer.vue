@@ -10,9 +10,8 @@
         v-for="(_, id) in listStore"
         :key="id"
         :id="id"
-        :store="props.storeName"
-        :previous="props.previous"
-        :next="props.next"
+        :store="props.store"
+        :max-index="props.maxIndex"
       />
     </div>
   </div>
@@ -27,17 +26,15 @@ const store = useListsStore();
 const props = defineProps({
   title: String,
   noAdd: Boolean,
-  storeName: String,
-  previous: String,
-  next: String,
+  store: Number,
+  maxIndex: Number,
 });
 const input = ref("");
-const listStore = store[props.storeName];
+const listStore = store.lists[props.store].tasks;
 
 function handleAdd() {
   if (input.value) {
-    const id = Math.floor(Math.random() * 10000);
-    store.addToList(props.storeName, input.value);
+    store.addToList(props.store, input.value);
     input.value = "";
   }
 }

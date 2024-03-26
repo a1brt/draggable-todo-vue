@@ -1,31 +1,22 @@
 <template>
   <div class="board">
     <ListContainer
-      class="todo"
-      title="todo"
-      store-name="todo"
-      next="progress"
-    />
-    <ListContainer
-      class="progress"
-      title="in progress"
-      store-name="progress"
-      no-add=true
-      previous="todo"
-      next="done"
-    />
-    <ListContainer
-      class="done"
-      title="done"
-      store-name="done"
-      no-add=true
-      previous="progress"
+      v-for="(props, index) in store.lists"
+      :key="props.id"
+      :class="props.id"
+      :title="props.title"
+      :store="index"
+      :no-add="props.noAdd"
+      :max-index="store.lists.length - 1"
     />
   </div>
 </template>
 
 <script setup lang="ts">
 import ListContainer from "./ListContainer.vue";
+import { useListsStore } from "../stores/lists.js";
+
+const store = useListsStore();
 </script>
 
 <style scoped>
