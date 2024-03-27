@@ -5,7 +5,7 @@
       :key="props.id"
       :class="props.id"
       :title="props.title"
-      :store="index"
+      :storeIndex="index"
       :no-add="props.noAdd"
       :max-index="store.lists.length - 1"
     />

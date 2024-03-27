@@ -3,23 +3,23 @@
     <div class="item-form" action="">
       <input
         type="text"
-        :value="storeRefs.lists.value[props.store].tasks[props.id]"
+        :value="storeRefs.lists.value[props.storeIndex].tasks[props.id]"
         @input="updateValue($event.target.value)"
       />
       <div class="button-container">
         <button
           type="button"
           class="previous"
-          :class="{ hidden: props.store === 0 }"
-          @click="changeList(props.store - 1)"
+          :class="{ hidden: props.storeIndex === 0 }"
+          @click="changeList(props.storeIndex - 1)"
         >
           ←
         </button>
         <button
           type="button"
           class="next"
-          :class="{ hidden: props.store === props.maxIndex }"
-          @click="changeList(props.store + 1)"
+          :class="{ hidden: props.storeIndex === props.maxIndex }"
+          @click="changeList(props.storeIndex + 1)"
         >
           →
         </button>
@@ -37,29 +37,29 @@ import { storeToRefs } from "pinia";
 import { watch } from "vue";
 
 const props = defineProps({
-  id: { type: Number, required: true },
-  store: String,
+  id: { type: String, required: true },
+  storeIndex: Number,
   maxIndex: Number,
 });
 const store = useListsStore();
 const storeRefs = storeToRefs(store);
 
 function handleDelete() {
-  store.deleteFromList(props.store, props.id);
+  store.deleteFromList(props.storeIndex, props.id);
 }
 function changeList(targetListIndex) {
-  store.changeLists(props.store, targetListIndex, props.id);
+  store.changeLists(props.storeIndex, targetListIndex, props.id);
 }
 
 function updateValue(newValue) {
-  store.updateListItem(props.store, props.id, newValue);
+  store.updateListItem(props.storeIndex, props.id, newValue);
 }
 
 watch(
-  () => storeRefs.lists.value[props.store].tasks[props.id],
+  () => storeRefs.lists.value[props.storeIndex].tasks[props.id],
   (val) => {
     if (!val) {
-      store.deleteFromList(props.store, props.id);
+      store.deleteFromList(props.storeIndex, props.id);
     }
   }
 );
