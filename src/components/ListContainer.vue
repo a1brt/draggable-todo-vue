@@ -37,6 +37,7 @@ const props = defineProps({
   storeIndex: Number,
   maxIndex: Number,
 });
+console.log(props.title);
 const input = ref("");
 const listStore = store.lists[props.storeIndex].tasks;
 const taskList = computed({
