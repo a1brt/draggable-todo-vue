@@ -41,6 +41,7 @@ const props = defineProps({
   storeIndex: Number,
   maxIndex: Number,
 });
+console.log("is", props.id);
 const store = useListsStore();
 const storeRefs = storeToRefs(store);
 

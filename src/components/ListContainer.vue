@@ -6,21 +6,25 @@
       <button @click="handleAdd" type="button">Add</button>
     </div>
     <div class="list column-flex">
-      <ListItem
-        v-for="(_, id) in listStore"
-        :key="id"
-        :id="id"
-        :storeIndex="props.storeIndex"
-        :max-index="props.maxIndex"
-      />
+      <draggable v-model="taskList" tag="div" group="tasks">
+        <template #item="{ element: item, id }">
+          <ListItem
+            :key="id"
+            :id="item[0]"
+            :storeIndex="props.storeIndex"
+            :max-index="props.maxIndex"
+          />
+        </template>
+      </draggable>
     </div>
   </div>
 </template>
 
 <script setup>
 import ListItem from "./ListItem.vue";
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { useListsStore } from "../stores/lists.js";
+import draggable from "vuedraggable";
 
 const store = useListsStore();
 const props = defineProps({
@@ -31,6 +35,18 @@ const props = defineProps({
 });
 const input = ref("");
 const listStore = store.lists[props.storeIndex].tasks;
+const taskList = computed({
+  get: () => {
+    return Object.entries(listStore);
+  },
+  set: (newValue) => {
+    Object.keys(listStore).forEach((key) => delete listStore[key]);
+
+    newValue.forEach((e) => {
+      listStore[e[0]] = e[1];
+    });
+  },
+});
 
 function handleAdd() {
   if (input.value) {

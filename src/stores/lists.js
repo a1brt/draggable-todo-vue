@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import {v4 as uuidv4} from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 
 export const useListsStore = defineStore("lists", {
   state: () => ({
@@ -28,6 +28,7 @@ export const useListsStore = defineStore("lists", {
       const id = uuidv4();
       this.lists[listName].tasks[id] = text;
     },
+
     deleteFromList(listName, id) {
       delete this.lists[listName].tasks[id];
     },
@@ -37,6 +38,7 @@ export const useListsStore = defineStore("lists", {
       delete this.lists[oldListIndex].tasks[id];
       this.lists[newListIndex].tasks[id] = item;
     },
+    
     updateListItem(listNmae, id, newValue) {
       this.lists[listNmae].tasks[id] = newValue;
     },
