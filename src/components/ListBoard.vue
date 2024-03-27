@@ -6,7 +6,6 @@
       :class="props.id"
       :title="props.title"
       :storeIndex="index"
-      :no-add="props.noAdd"
       :max-index="store.lists.length - 1"
     />
   </div>
@@ -23,8 +22,7 @@ const store = useListsStore();
 .board {
   display: flex;
   justify-content: space-around;
-  background-color: antiquewhite;
+  background: linear-gradient(109.6deg, rgba(0, 0, 0, 0.93) 11.2%, rgb(63, 61, 61) 78.9%);
   padding: 20px;
-  min-height: 80%;
 }
 </style>

@@ -12,13 +12,11 @@ export const useListsStore = defineStore("lists", {
       {
         id: "progress",
         title: "In Progress",
-        noAdd: true,
         tasks: {},
       },
       {
         id: "done",
         title: "Done",
-        noAdd: true,
         tasks: {},
       },
     ],

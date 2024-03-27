@@ -1,21 +1,26 @@
 <template>
   <div class="container column-flex">
     <h2>{{ title }}</h2>
-    <div v-if="!noAdd">
+    <draggable
+      v-model="taskList"
+      tag="div"
+      class="list column-flex"
+      group="tasks"
+      item-key="id"
+      :animation="500"
+    >
+      <template #item="{ element: item, id }">
+        <ListItem
+          :key="id"
+          :id="item[0]"
+          :storeIndex="props.storeIndex"
+          :max-index="props.maxIndex"
+        />
+      </template>
+    </draggable>
+    <div>
       <input v-model="input" type="text" />
       <button @click="handleAdd" type="button">Add</button>
-    </div>
-    <div class="list column-flex">
-      <draggable v-model="taskList" tag="div" group="tasks">
-        <template #item="{ element: item, id }">
-          <ListItem
-            :key="id"
-            :id="item[0]"
-            :storeIndex="props.storeIndex"
-            :max-index="props.maxIndex"
-          />
-        </template>
-      </draggable>
     </div>
   </div>
 </template>
@@ -29,7 +34,6 @@ import draggable from "vuedraggable";
 const store = useListsStore();
 const props = defineProps({
   title: String,
-  noAdd: Boolean,
   storeIndex: Number,
   maxIndex: Number,
 });
@@ -40,8 +44,11 @@ const taskList = computed({
     return Object.entries(listStore);
   },
   set: (newValue) => {
+    if (!newValue) {
+      console.log("BUG");
+      return;
+    }
     Object.keys(listStore).forEach((key) => delete listStore[key]);
-
     newValue.forEach((e) => {
       listStore[e[0]] = e[1];
     });
@@ -57,15 +64,19 @@ function handleAdd() {
 </script>
 
 <style scoped>
-p {
-  text-align: center;
+h2 {
+  width: 100%;
+  text-align: start;
 }
 
 .container {
   align-items: center;
-  min-height: 90%;
-  width: 269px;
-  background-color: #cecece;
+  min-width: 20%;
+  background-color: white;
+  border-radius: 20px;
+  padding: 0px 20px 10px 20px;
+  gap: 20px;
+  height: fit-content;
 }
 
 .list {

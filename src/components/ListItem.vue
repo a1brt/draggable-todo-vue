@@ -3,11 +3,10 @@
     <div class="item-form" action="">
       <input
         type="text"
-        :value="storeRefs.lists.value[props.storeIndex].tasks[props.id]"
-        @input="updateValue($event.target.value)"
+        v-model="storeRefs.lists.value[props.storeIndex].tasks[props.id]"
       />
       <div class="button-container">
-        <button
+        <!-- <button
           type="button"
           class="previous"
           :class="{ hidden: props.storeIndex === 0 }"
@@ -22,7 +21,7 @@
           @click="changeList(props.storeIndex + 1)"
         >
           →
-        </button>
+        </button> -->
         <button type="button" class="delete" @click="handleDelete">
           <img width="20" height="20" src="../assets/delete.svg" alt="delete" />
         </button>
@@ -41,7 +40,6 @@ const props = defineProps({
   storeIndex: Number,
   maxIndex: Number,
 });
-console.log("is", props.id);
 const store = useListsStore();
 const storeRefs = storeToRefs(store);
 
@@ -59,9 +57,7 @@ function updateValue(newValue) {
 watch(
   () => storeRefs.lists.value[props.storeIndex].tasks[props.id],
   (val) => {
-    if (!val) {
-      store.deleteFromList(props.storeIndex, props.id);
-    }
+    store.updateListItem(props.storeIndex, props.id, val);
   }
 );
 </script>
@@ -69,8 +65,9 @@ watch(
 <style scoped>
 .list-item {
   width: 100%;
-  border: 0px solid;
-  border-radius: 2px;
+  padding: 10px;
+  border-radius: 20px;
+  background-color: black;
 }
 .item-form {
   display: flex;
