@@ -7,7 +7,6 @@
       class="list column-flex"
       group="tasks"
       item-key="id"
-      :animation="500"
     >
       <template #item="{ element: item, id }">
         <ListItem
@@ -37,7 +36,6 @@ const props = defineProps({
   storeIndex: Number,
   maxIndex: Number,
 });
-console.log(props.title);
 const input = ref("");
 const listStore = store.lists[props.storeIndex].tasks;
 const taskList = computed({
@@ -45,10 +43,6 @@ const taskList = computed({
     return Object.entries(listStore);
   },
   set: (newValue) => {
-    if (!newValue) {
-      console.log("BUG");
-      return;
-    }
     Object.keys(listStore).forEach((key) => delete listStore[key]);
     newValue.forEach((e) => {
       listStore[e[0]] = e[1];
@@ -62,6 +56,7 @@ function handleAdd() {
     input.value = "";
   }
 }
+
 </script>
 
 <style scoped>

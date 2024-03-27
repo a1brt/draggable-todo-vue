@@ -6,22 +6,6 @@
         v-model="storeRefs.lists.value[props.storeIndex].tasks[props.id]"
       />
       <div class="button-container">
-        <!-- <button
-          type="button"
-          class="previous"
-          :class="{ hidden: props.storeIndex === 0 }"
-          @click="changeList(props.storeIndex - 1)"
-        >
-          ←
-        </button>
-        <button
-          type="button"
-          class="next"
-          :class="{ hidden: props.storeIndex === props.maxIndex }"
-          @click="changeList(props.storeIndex + 1)"
-        >
-          →
-        </button> -->
         <button type="button" class="delete" @click="handleDelete">
           <img width="20" height="20" src="../assets/delete.svg" alt="delete" />
         </button>
@@ -45,9 +29,6 @@ const storeRefs = storeToRefs(store);
 
 function handleDelete() {
   store.deleteFromList(props.storeIndex, props.id);
-}
-function changeList(targetListIndex) {
-  store.changeLists(props.storeIndex, targetListIndex, props.id);
 }
 
 function updateValue(newValue) {
