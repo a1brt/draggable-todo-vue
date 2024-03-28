@@ -1,9 +1,11 @@
 <template>
-  <div class="list-item">
-    <div class="item-form" action="">
+  <div class="task-list">
+    <div class="task">
       <input
+        class="task-input"
         type="text"
         v-model="storeRefs.lists.value[props.storeIndex].tasks[props.id]"
+        @blur="l"
       />
       <div class="button-container">
         <button type="button" class="delete" @click="handleDelete">
@@ -28,7 +30,9 @@ const store = useListsStore();
 const storeRefs = storeToRefs(store);
 
 function handleDelete() {
-  store.deleteFromList(props.storeIndex, props.id);
+  if (confirm("Sure?")) {
+    store.deleteFromList(props.storeIndex, props.id);
+  }
 }
 
 function updateValue(newValue) {
@@ -44,21 +48,30 @@ watch(
 </script>
 
 <style scoped>
-.list-item {
+.task-list {
   width: 100%;
   padding: 10px;
   border-radius: 20px;
   background-color: black;
 }
-.item-form {
+.task {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
+  gap: 10px;
 }
 .button-container {
   display: flex;
 }
 .delete {
-  margin: 0;
-  padding: 0;
+  display: flex;
+  padding: 2px;
+  border-radius: 50%;
+}
+
+.task-input {
+  background: none;
+  border: none;
+  color: white;
+  padding-left: 20px;
 }
 </style>

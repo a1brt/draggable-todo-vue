@@ -17,9 +17,38 @@
         />
       </template>
     </draggable>
-    <div>
-      <input v-model="input" type="text" />
-      <button @click="handleAdd" type="button">Add</button>
+    <div class="list-footer" @mousedown="a">
+      <div v-if="!addingTask" class="input-switch">
+        <button
+          class="switch-button unstyled-button"
+          @click="toggleAdd"
+          type="button"
+        >
+          Add a task
+        </button>
+      </div>
+      <form
+        v-if="addingTask"
+        @keydown.enter.prevent
+        action=""
+        class="task-input-form"
+      >
+        <input v-model="input" type="text" />
+        <button
+          class="unstyled-button input-button"
+          @click="handleAdd"
+          type="button"
+        >
+          Add
+        </button>
+        <button
+          class="unstyled-button input-button"
+          @click="toggleAdd"
+          type="button"
+        >
+          X
+        </button>
+      </form>
     </div>
   </div>
 </template>
@@ -35,8 +64,11 @@ const props = defineProps({
   title: String,
   storeIndex: Number,
   maxIndex: Number,
+  toggleListDrag: Object,
 });
 const input = ref("");
+const addingTask = ref(false);
+
 const listStore = store.lists[props.storeIndex].tasks;
 const taskList = computed({
   get: () => {
@@ -50,13 +82,17 @@ const taskList = computed({
   },
 });
 
+function toggleAdd() {
+  input.value = "";
+  addingTask.value = !addingTask.value;
+}
+
 function handleAdd() {
   if (input.value) {
     store.addToList(props.storeIndex, input.value);
-    input.value = "";
+    toggleAdd();
   }
 }
-
 </script>
 
 <style scoped>
@@ -64,10 +100,14 @@ h2 {
   width: 100%;
   text-align: start;
 }
-
+.unstyled-button {
+  font: inherit;
+  cursor: pointer;
+  outline: inherit;
+}
 .container {
   align-items: center;
-  min-width: 20%;
+  min-width: 270px;
   background-color: white;
   border-radius: 20px;
   padding: 0px 20px 10px 20px;
@@ -78,6 +118,34 @@ h2 {
 .list {
   width: 100%;
   gap: 15px;
-  padding: 10px;
+}
+
+.list-footer {
+  width: 100%;
+}
+
+.task-input-form {
+  display: flex;
+  gap: 2px;
+  padding: 5px 6px;
+  border-radius: 12px;
+  background-color: black;
+}
+.switch-button {
+  background: none;
+  color: inherit;
+  border: 1px solid black;
+  border-radius: 12px;
+  padding: 3px 5px;
+}
+.switch-button:hover {
+  background: black;
+  color: white;
+}
+
+.input-button {
+  background-color: white;
+  border: 0;
+  border-radius: 5px;
 }
 </style>

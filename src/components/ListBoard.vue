@@ -1,5 +1,11 @@
 <template>
-  <draggable class="board" v-model="store.lists" tag="div" item-key="id">
+  <draggable
+    class="board"
+    v-model="store.lists"
+    tag="div"
+    item-key="id"
+    :disabled="disableDrag"
+  >
     <template #item="{ element: item, index }">
       <ListContainer
         :class="item.id"
@@ -15,8 +21,10 @@
 import ListContainer from "./ListContainer.vue";
 import { useListsStore } from "../stores/lists.js";
 import draggable from "vuedraggable";
+import { ref } from "vue";
 
 const store = useListsStore();
+const disableDrag = ref(false);
 </script>
 
 <style scoped>
