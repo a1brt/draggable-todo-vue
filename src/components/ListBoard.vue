@@ -8,7 +8,7 @@
   >
     <template #item="{ element: item, index }">
       <ListContainer
-        :class="item.id"
+        :class="item.tag"
         :title="item.title"
         :storeIndex="index"
         :max-index="store.lists.length - 1"

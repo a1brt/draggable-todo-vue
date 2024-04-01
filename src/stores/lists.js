@@ -5,17 +5,17 @@ export const useListsStore = defineStore("lists", {
   state: () => ({
     lists: [
       {
-        id: "todo",
+        tag: "todo",
         title: "Todo",
         tasks: {},
       },
       {
-        id: "progress",
+        tag: "progress",
         title: "In Progress",
         tasks: {},
       },
       {
-        id: "done",
+        tag: "done",
         title: "Done",
         tasks: {},
       },
