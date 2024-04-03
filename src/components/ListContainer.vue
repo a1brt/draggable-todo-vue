@@ -12,12 +12,12 @@
         <ListItem
           :key="id"
           :id="item[0]"
+          :list-id="props.listId"
           :storeIndex="props.storeIndex"
-          :max-index="props.maxIndex"
         />
       </template>
     </draggable>
-    <div class="list-footer" @mousedown="a">
+    <div class="list-footer">
       <div v-if="!addingTask" class="input-switch">
         <button
           class="switch-button unstyled-button"
@@ -55,30 +55,36 @@
 
 <script setup>
 import ListItem from "./ListItem.vue";
-import { ref, computed } from "vue";
+import { ref, toRefs, computed } from "vue";
 import { useListsStore } from "../stores/lists.js";
 import draggable from "vuedraggable";
+import axios from "axios";
 
 const store = useListsStore();
 const props = defineProps({
   title: String,
   storeIndex: Number,
-  maxIndex: Number,
+  listId: Number,
   toggleListDrag: Object,
 });
 const input = ref("");
 const addingTask = ref(false);
+const { tasks } = toRefs(store.lists[props.storeIndex]);
 
-const listStore = store.lists[props.storeIndex].tasks;
 const taskList = computed({
   get: () => {
-    return Object.entries(listStore);
+    return Object.entries(tasks.value);
   },
   set: (newValue) => {
-    Object.keys(listStore).forEach((key) => delete listStore[key]);
-    newValue.forEach((e) => {
+    const listStore = {};
+    const taskIds = Object.keys(tasks.value);
+    newValue.forEach((e,i) => {
+      if (!taskIds.includes(e[0])) {
+        changeTasksList(e[0]);
+      }
       listStore[e[0]] = e[1];
     });
+    store.setListsTasks(listStore, props.storeIndex);
   },
 });
 
@@ -87,11 +93,36 @@ function toggleAdd() {
   addingTask.value = !addingTask.value;
 }
 
-function handleAdd() {
-  if (input.value) {
-    store.addToList(props.storeIndex, input.value);
+async function handleAdd() {
+  if (!input.value) return;
+  try {
+    const response = await axios.post(
+      `http://${import.meta.env.VITE_API_BASE_URL}/task_lists/${props.listId}/tasks`,
+      { text: input.value }
+    );
+
+    store.addToList(props.storeIndex, response.data.text, response.data.id);
     toggleAdd();
+  } catch (error) {
+    console.error("Error:", error);
   }
+}
+
+
+function changeTasksList(taskId) {
+  axios
+    .patch(
+      `http://${import.meta.env.VITE_API_BASE_URL}/task_lists/${
+        props.listId
+      }/tasks/${taskId}`,
+      {
+        task_list_id: props.listId,
+      }
+    )
+    .then((response) => {})
+    .catch((error) => {
+      console.error("Error:", error);
+    });
 }
 </script>
 

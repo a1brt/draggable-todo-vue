@@ -1,29 +1,11 @@
 import { defineStore } from "pinia";
-import { v4 as uuidv4 } from "uuid";
 
 export const useListsStore = defineStore("lists", {
   state: () => ({
-    lists: [
-      {
-        tag: "todo",
-        title: "Todo",
-        tasks: {},
-      },
-      {
-        tag: "progress",
-        title: "In Progress",
-        tasks: {},
-      },
-      {
-        tag: "done",
-        title: "Done",
-        tasks: {},
-      },
-    ],
+    lists: [],
   }),
   actions: {
-    addToList(listName, text) {
-      const id = uuidv4();
+    addToList(listName, text, id) {
       this.lists[listName].tasks[id] = text;
     },
 
@@ -31,14 +13,16 @@ export const useListsStore = defineStore("lists", {
       delete this.lists[listName].tasks[id];
     },
 
-    changeLists(oldListIndex, newListIndex, id) {
-      const item = this.lists[oldListIndex].tasks[id];
-      delete this.lists[oldListIndex].tasks[id];
-      this.lists[newListIndex].tasks[id] = item;
+    updateListItem(listName, id, newValue) {
+      this.lists[listName].tasks[id] = newValue;
     },
-    
-    updateListItem(listNmae, id, newValue) {
-      this.lists[listNmae].tasks[id] = newValue;
+
+    setLists(data) {
+      this.lists = data;
+    },
+
+    setListsTasks(tasks, listIndex) {
+      this.lists[listIndex].tasks = tasks;
     },
   },
 });
